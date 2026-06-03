@@ -86,4 +86,24 @@ public class Produto
 
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
+
+
+    // Chave estrangeira do relacionamento 1-para-N com Categoria.
+
+    public int CategoriaId { get; set; }
+
+
+
+    // Navegação para a categoria dona deste produto.
+
+    public Categoria? Categoria { get; set; }
+
+
+
+    // Navegação do relacionamento 1-para-1 com DetalheProduto.
+
+    // Nem todo produto precisa de um detalhe técnico cadastrado.
+
+    public DetalheProduto? DetalheProduto { get; set; }
+
 }

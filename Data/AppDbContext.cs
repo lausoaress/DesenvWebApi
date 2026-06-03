@@ -72,4 +72,48 @@ public class AppDbContext : DbContext
 
     public DbSet<Produto> Produtos { get; set; }
 
+
+
+    public DbSet<Categoria> Categorias { get; set; }
+
+
+
+    public DbSet<DetalheProduto> DetalhesProduto { get; set; }
+
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+    {
+
+        modelBuilder.Entity<Produto>()
+
+            .HasOne(produto => produto.Categoria)
+
+            .WithMany(categoria => categoria.Produtos)
+
+            .HasForeignKey(produto => produto.CategoriaId)
+
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<DetalheProduto>()
+
+            .HasOne(detalhe => detalhe.Produto)
+
+            .WithOne(produto => produto.DetalheProduto)
+
+            .HasForeignKey<DetalheProduto>(detalhe => detalhe.ProdutoId)
+
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+
+        modelBuilder.Entity<DetalheProduto>()
+
+            .HasIndex(detalhe => detalhe.ProdutoId)
+
+            .IsUnique();
+
+    }
+
 }

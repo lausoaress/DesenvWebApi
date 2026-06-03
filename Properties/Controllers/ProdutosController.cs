@@ -94,13 +94,15 @@ public class ProdutosController : ControllerBase
 
     {
 
-        // _context.Produtos é o DbSet<Produto> — representa a tabela "Produtos".
+        // Carrega a categoria e o detalhe técnico junto com cada produto.
 
-        // .ToListAsync() executa: SELECT * FROM "Produtos"
+        var produtos = await _context.Produtos
 
-        // e retorna o resultado como uma List<Produto>.
+            .Include(p => p.Categoria)
 
-        var produtos = await _context.Produtos.ToListAsync();
+            .Include(p => p.DetalheProduto)
+
+            .ToListAsync();
 
 
 
@@ -134,13 +136,15 @@ public class ProdutosController : ControllerBase
 
     {
 
-        // FindAsync busca pelo valor da chave primária.
+        // Busca o produto por ID e carrega o detalhe técnico quando existir.
 
-        // Equivalente a: SELECT * FROM "Produtos" WHERE "Id" = @id LIMIT 1
+        var produto = await _context.Produtos
 
-        // Retorna null se não encontrar.
+            .Include(p => p.Categoria)
 
-        var produto = await _context.Produtos.FindAsync(id);
+            .Include(p => p.DetalheProduto)
+
+            .FirstOrDefaultAsync(p => p.Id == id);
 
 
 
@@ -317,6 +321,8 @@ public class ProdutosController : ControllerBase
         produtoExistente.Preco = produto.Preco;
 
         produtoExistente.Quantidade = produto.Quantidade;
+
+        produtoExistente.CategoriaId = produto.CategoriaId;
 
 
 
